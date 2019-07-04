@@ -1,16 +1,17 @@
-<!doctype html>
-<html lang="en">
+{% extends "base.html" %}
 
-<body>
-<ul>
-    {% for movie in object_list %}
-        <li>{{ movie }}</li>
-    {% empty %}
-        <li>No movies yet.</li>
-    {% endfor %}
-</ul>
-<p>Using https?
-    {{ request.is_secure|yesno }}</p>
-</body>
+{% block title %}
+    All Movies
+{% endblock %}
 
-</html>
+{% block main %}
+    <ul>
+        {% for movie in object_list %}
+            <li>
+                <a href="{% url 'core:movie_detail' pk=movie.id %}">
+                    {{ movie }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
