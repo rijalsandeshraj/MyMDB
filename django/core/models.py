@@ -1,5 +1,9 @@
 from django.db import models
 
+from django.contrib.auth import get_user_model
+
+USER = get_user_model()
+
 
 class PersonManager(models.Manager):
     def all_with_prefetch_movies(self):
@@ -97,3 +101,20 @@ class Role(models.Model):
 
     def __str__(self):
         return '{} {} {}'.format(self.movie_id, self.person_id, self.name)
+
+
+class Vote(models.Model):
+    UP = 1
+    DOWN = -1
+    VALUE_CHOICES = (
+        (UP, 'like'),
+        (DOWN, 'dislike'),
+    )
+
+    value = models.SmallIntegerField(choices=VALUE_CHOICES)
+    user = models.ForeignKey(USER, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    voted_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'movie')
